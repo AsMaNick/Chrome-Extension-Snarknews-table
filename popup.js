@@ -91,12 +91,13 @@ function setDisableSites() {
 	});
 }
 
-function writeError(error) {
+function writeError(error, color) {
 	document.getElementById("error").innerHTML = error;
+	document.getElementById("error").style = "font-size: 11px; color: " + color;
 }
 
 function clearError() {
-	writeError("");
+	writeError("", "red");
 }
 
 function addNewTeam() {
@@ -113,7 +114,7 @@ function addNewTeam() {
 	}
 	var teamName = document.getElementById("teamName").value;
 	if (teamName == "") {
-		writeError("Team name shouldn't be empty");
+		writeError("Team name shouldn't be empty", "red");
 	} else if (users.length > 0) {
 		var allHandles = handles.join(";");
 		$.getJSON("http://codeforces.com/api/user.info?handles=" + allHandles, function(data) {
@@ -128,11 +129,13 @@ function addNewTeam() {
 			teamWithLink["teamName"] = document.getElementById("teamName").value;
 			//$.post("https://script.google.com/macros/s/AKfycbx7l3M86xfk9znJWdskgJBPklB73yRJ40FGFAnxDQrEC-eKiBlc/exec", team);
 			$.post("https://script.google.com/macros/s/AKfycbx7l3M86xfk9znJWdskgJBPklB73yRJ40FGFAnxDQrEC-eKiBlc/exec", teamWithLink);
+			writeError("Your team was successfully added! It appears in the standings in a day.", "green");
+			clearTeam();
 		}).fail(function(jqxhr, textStatus, error) {
-			writeError("User not found on the codeforces, try again");
+			writeError("User not found on the codeforces, try again", "red");
 		});
 	} else {
-		writeError("There should be at least one user in the team");
+		writeError("There should be at least one user in the team", "red");
 	}
 }
 
@@ -143,6 +146,13 @@ function changeTeam() {
 	}
 	chrome.extension.sendRequest(["setFilledData", filledData], function(data) {
 	});
+}
+
+function clearTeam() {
+	for (var id of ["teamName", "user1", "user2", "user3", "user4", "user5", "handle1", "handle2", "handle3", "handle4", "handle5"]) {
+		document.getElementById(id).value = "";
+	}
+	changeTeam();
 }
 
 function setFilledData() {
