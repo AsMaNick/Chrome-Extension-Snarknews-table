@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="styles.css">
+		<script type='text/javascript' src='third_party/jquery.js'> </script>
+		<script type='text/javascript' src='include.js'> </script>
+		<script type='text/javascript' src='popup.js'> </script>
+	</head>
+	<body style='width: 350px; font-size: 13px' id="body">
+		<a id="lastLoaded">Last update of all users: never</a>
+		<button id="reloadTeams"> <img src="static/reload.png"> </button>
+		<br>
+		
+		<caption> Select View: </caption>
+		<input type="radio" name="showingType" id="showingType0">
+		<label for="showingType0">  
+			<a href="https://codeforces.com/profile/tourist" title="Korotkevich" class="rated-user user-legendary">
+				<span class="legendary-user-first-letter">t</span>ourist
+			</a>
+		</label>
+		<input type="radio" name="showingType" id="showingType1">
+		<label for="showingType1">  
+			<a href="https://codeforces.com/profile/tourist" title="tourist" class="rated-user user-legendary">
+				<span class="legendary-user-first-letter">K</span>orotkevich
+			</a>
+		</label>
+		
+		<button id="2" style="width: 100%; margin-top: 7px">Disable on this site</button>
+		<button id="3" style="width: 100%; margin-top: 7px">Disable everywhere</button>
+		
+		<div style="width: 100%; margin-top: 7px">
+			<center> <caption> Add Your Team </caption> </center> 
+			<div style="margin-top: 7px">
+				Team name: 
+				<input id="teamName"></input>
+			</div>
+			<table id='5' border='2' style='text-align: center; width: 100%; margin-top:7px'>
+				<tr>
+					<td> # </td>
+					<td> Paricipant Name </td>
+					<td> Handle on the <a href="http://codeforces.com/"> codeforces </a> </td>
+				</tr>
+				<tr>
+					<td> 1 </td>
+					<td> <input id="user1" size=18 style="text-align:center; "> </td>
+					<td> <input id="handle1" size=18 style="text-align:center; "> </td>
+				</tr>
+				<tr>
+					<td> 2 </td>
+					<td> <input id="user2" size=18 style="text-align:center; "> </td>
+					<td> <input id="handle2" size=18 style="text-align:center; "> </td>
+				</tr>
+				<tr>
+					<td> 3 </td>
+					<td> <input id="user3" size=18 style="text-align:center; "> </td>
+					<td> <input id="handle3" size=18 style="text-align:center; "> </td>
+				</tr>
+				<tr>
+					<td> 4 </td>
+					<td> <input id="user4" size=18 style="text-align:center; "> </td>
+					<td> <input id="handle4" size=18 style="text-align:center; "> </td>
+				</tr>
+				<tr>
+					<td> 5 </td>
+					<td> <input id="user5" size=18 style="text-align:center; "> </td>
+					<td> <input id="handle5" size=18 style="text-align:center; "> </td>
+				</tr>
+			</table>
+			<center style="margin-top: 5px"> <button style="width: 100%" id="addTeamButton"> <img src="static/plus.png"> </button> </center> 
+		</div>
+		<span id="error" style="font-size: 11px; color: red"></span>
+		<script type='text/javascript' src='popup.js'> </script>
+		<!-- <script type='text/javascript' src='popup.js'> </script> !-->
+	</body>
+</html>
