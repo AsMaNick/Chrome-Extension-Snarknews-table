@@ -1,4 +1,4 @@
-/*	Created in August 2017
+﻿/*	Created in August 2017
 	Updated in September 2018
 	
 	by
@@ -149,15 +149,26 @@ function getTeamId(allUsers) {
 	return -1;
 }
 
+function isYandex() {
+	var href = document.location.toString();
+	return href.indexOf("yandex") != -1;
+}
+
 function modifyStandings(index, elem) {
 	console.log(allNames);
 	var text = elem.innerHTML, newText = "";
-	text = elem.outerHTML;
+	if (!isYandex()) {
+		text = elem.outerHTML;
+	}
 	var last = 0;
 	var position = text.indexOf("<tr");
 	var allTeams = [];
+	var lookFor = ["<tr", "<td", "<td", ">"];
+	if (isYandex()) {
+		lookFor = ["<tr", "<span class=\"user__first-letter\">", "</span>"];
+	}
 	while (true) {
-		for (var s of ["<tr", "<td", "<td", ">"]) {
+		for (var s of lookFor) {
 			position = text.indexOf(s, position + 1);
 			if (position == -1) {
 				break;
@@ -249,11 +260,12 @@ function modifyStandings(index, elem) {
 		}
 	}
 	newText += text.substr(last);
-	var href = document.location.toString();
-	if (href.indexOf("yandex") == -1) {
+	if (!isYandex()) {
 		newText += listOfTeamsSnark(allTeams);
+		elem.outerHTML = newText;
+	} else {
+		elem.innerHTML = newText;
 	}
-	elem.outerHTML = newText;
 }
 
 function updateNames() {
