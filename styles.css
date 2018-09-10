@@ -33,3 +33,26 @@
 .user-legendary {
     color: red !important;
 }
+
+TR.standExt0 {
+    BACKGROUND-COLOR: #F8F8F8;
+}
+
+TR.standExt1 {
+    BACKGROUND-COLOR: #F2F2F2;
+}
+
+TR.standExt2 {
+    BACKGROUND-COLOR: #E0E0FF;
+}
+
+TR.standExt3 {
+    BACKGROUND-COLOR: #E8E8FF;
+}
+
+TD.stndExt {
+    font-size: 12px;
+    border-width: 0px;
+    border-color: #000000;
+    margin: 1px;
+}

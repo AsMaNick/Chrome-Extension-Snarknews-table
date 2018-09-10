@@ -30,7 +30,7 @@ function updateLastLoaded() {
 }
 
 updateLastLoaded();
-setInterval(function() { updateLastLoaded(); }, 3000);
+setInterval(function() { updateLastLoaded(); }, 5000);
 	
 function stopOnThisSite() {
 	var elem = document.getElementById("2");

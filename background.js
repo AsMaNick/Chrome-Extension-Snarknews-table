@@ -62,47 +62,49 @@ function loadTeams() {
 				allHandles += user.handle + ";";
 			}
 		}
-		$.getJSON("http://codeforces.com/api/user.info?handles=" + allHandles,
-			function(data) {
-				var teamId = 0, userId = 0;
-				for (var user of data.result) {
-					teams[teamId].users[userId].rating = user.rating;
-					teams[teamId].users[userId].handle = user.handle;
-					++userId;
-					if (userId == teams[teamId].users.length) {
-						++teamId;
-						userId = 0;
-					}
+		$.getJSON("http://codeforces.com/api/user.info?handles=" + allHandles, function(data) {
+			var teamId = 0, userId = 0;
+			for (var user of data.result) {
+				teams[teamId].users[userId].rating = user.rating;
+				teams[teamId].users[userId].handle = user.handle;
+				++userId;
+				if (userId == teams[teamId].users.length) {
+					++teamId;
+					userId = 0;
 				}
-				
-				// recieving team_ids
-				teamIds = {};
-				for (var teamId = 0; teamId < teams.length; ++teamId) {
-					var team = teams[teamId];
-					console.log(team.str());
-					for (var i = 0; i < team.users.length; ++i) {
-						for (var j = i + 1; j < team.users.length; ++j) {
-							teamIds[team.subsetOfUsers([i, j])] = teamId;
-							for (var k = j + 1; k < team.users.length; ++k) {
-								teamIds[team.subsetOfUsers([i, j, k])] = teamId;
-								for (var q = k + 1; q < team.users.length; ++q) {
-									teamIds[team.subsetOfUsers([i, j, k, q])] = teamId;
-									for (var w = q + 1; w < team.users.length; ++w) {
-										teamIds[team.subsetOfUsers([i, j, k, q, w])] = teamId;
-									}
+			}
+			
+			// recieving team_ids
+			teamIds = {};
+			for (var teamId = 0; teamId < teams.length; ++teamId) {
+				var team = teams[teamId];
+				console.log(team.str());
+				for (var i = 0; i < team.users.length; ++i) {
+					for (var j = i + 1; j < team.users.length; ++j) {
+						teamIds[team.subsetOfUsers([i, j])] = teamId;
+						for (var k = j + 1; k < team.users.length; ++k) {
+							teamIds[team.subsetOfUsers([i, j, k])] = teamId;
+							for (var q = k + 1; q < team.users.length; ++q) {
+								teamIds[team.subsetOfUsers([i, j, k, q])] = teamId;
+								for (var w = q + 1; w < team.users.length; ++w) {
+									teamIds[team.subsetOfUsers([i, j, k, q, w])] = teamId;
 								}
 							}
 						}
 					}
-					if (team.users.length == 1) {
-						teamIds[team.subsetOfUsers([0])] = teamId;
-					}
 				}
-				loaded = true;
-				loading = false;
-				lastLoaded = Date.now();
+				if (team.users.length == 1) {
+					teamIds[team.subsetOfUsers([0])] = teamId;
+				}
 			}
-		);
+			loaded = true;
+			loading = false;
+			lastLoaded = Date.now();
+		}).fail(function(jqxhr, textStatus, error) {
+			loading = false;
+		});
+	}).fail(function(jqxhr, textStatus, error) {
+		loading = false;
 	});
 }
 
@@ -158,5 +160,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	}
 });
 
+function checkNeedLoad() {
+	var milliSecondsSinceLastLoad = (Date.now() - lastLoaded);
+	if (milliSecondsSinceLastLoad > 6 * 60 * 60 * 1000) { // reload teams every 6 hours.
+		loadTeams();
+	}
+}
+
 loadTeams();
-setInterval(function() { loadTeams(); }, 6 * 60 * 60 * 1000); // reload every 6 hours.
+setInterval(function() { checkNeedLoad(); }, 10 * 60 * 1000); // try reload teams every 10 minutes

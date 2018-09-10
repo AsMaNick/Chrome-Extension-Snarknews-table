@@ -36,9 +36,7 @@ chrome.extension.sendRequest(['setCurrentSite', document.location.href], functio
 });
 chrome.extension.sendRequest(['checkSite', [document.location.href, 'all']], function(data) {
 	if (!data['blocked']) {
-		if (!data['blocked']) {
-			loadAllNicks();
-		}
+		loadAllNicks();
 	}
 });
 
@@ -99,16 +97,16 @@ function getColoredRating(rating) {
 	return result;
 }
 
-function listOfTeamsSnark(all_teams) {
+function listOfTeamsSnark(allTeams) {
 	var res = '<br>';
-	res += "<table class = 'standings'>";
+	res += "<table class='standings'>";
 	res += "<tr class='stand0'>";
-	res += "<th class='stnd'> №";
-	res += "<th class='stnd'> Team Name";
-	res += "<th class='stnd'> Rating";
-	res += "<th class='stnd'> Real place";
+	res += "<th class='stndExt'> №";
+	res += "<th class='stndExt'> Team Name";
+	res += "<th class='stndExt'> Rating";
+	res += "<th class='stndExt'> Real place";
 	res += "</tr>";
-	all_teams.sort(function(a, b) {
+	allTeams.sort(function(a, b) {
 		if (a[0] > b[0]) {
 			return -1;
 		} else if (a[0] < b[0]) {
@@ -117,13 +115,19 @@ function listOfTeamsSnark(all_teams) {
 			return a[2] - b[2];
 		}
 	});
-	for (var i = 0; i < all_teams.length; ++i) {
-		cls = (1 ^ (((i / 10) >> 0) % 2)) * 2 + i % 2;
-		res += "<tr class='stand0" + cls.toString() + "' style='text-align:center'>";
-		res += "<td class='stnd'> " + (i + 1).toString() + ". </td>";
-		res += "<td class='stnd'> " + all_teams[i][1] + " </td>";
-		res += "<td class='stnd'> " + getColoredRating(all_teams[i][0] >> 0) + " </td>";
-		res += "<td class='stnd'> " + all_teams[i][2] + " </td>";
+	var groupColor = 1, groupClass = 0;
+	for (var i = 0; i < allTeams.length; ++i) {
+		if (i && getColor(allTeams[i][0]) != getColor(allTeams[i - 1][0])) {
+			groupColor ^= 1;
+			groupClass = 0;
+		} else {
+			groupClass ^= 1;
+		}
+		res += "<tr class='standExt" + (2 * groupColor + groupClass).toString() + "' style='text-align:center'>";
+		res += "<td class='stndExt'> " + (i + 1).toString() + ". </td>";
+		res += "<td class='stndExt'> " + allTeams[i][1] + " </td>";
+		res += "<td class='stndExt'> " + getColoredRating(allTeams[i][0] >> 0) + " </td>";
+		res += "<td class='stndExt'> " + allTeams[i][2] + " </td>";
 		res += "</tr>";
 	}
 	res += "</table>";
