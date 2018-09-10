@@ -62,27 +62,27 @@ function updateName(user) {
 }
 
 function getWinProbability(ra, rb) {
-    return 1.0 / (1.0 + Math.pow(10.0, (rb - ra) / 400.0));
+	return 1.0 / (1.0 + Math.pow(10.0, (rb - ra) / 400.0));
 }
 
 function getTeamRating(teamRatings) {
-    var left = 1;
-    var right = 11111;
-    for (var it = 0; it < 100; ++it) {
-        var r = (left + right) / 2.0;
-        var rWinsProbability = 1.0;
-        for (var i = 0; i < teamRatings.length; ++i) {
-            rWinsProbability *= getWinProbability(r, teamRatings[i]);
+	var left = 1;
+	var right = 11111;
+	for (var it = 0; it < 100; ++it) {
+		var r = (left + right) / 2.0;
+		var rWinsProbability = 1.0;
+		for (var i = 0; i < teamRatings.length; ++i) {
+			rWinsProbability *= getWinProbability(r, teamRatings[i]);
 		}
-        var rating = Math.log10(1 / (rWinsProbability) - 1) * 400 + r;
-        if (rating > r) {
-            left = r;
+		var rating = Math.log10(1 / (rWinsProbability) - 1) * 400 + r;
+		if (rating > r) {
+			left = r;
 		}
-        else {
-            right = r;
+		else {
+			right = r;
 		}
-    }
-    return parseInt((left + right) / 2.0);
+	}
+	return parseInt((left + right) / 2.0);
 }
 
 function getColoredRating(rating) {
