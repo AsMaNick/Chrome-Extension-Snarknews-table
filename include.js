@@ -1,5 +1,7 @@
 function getColor(r) {
-	if (r < 1200) {
+	if (r == 0) {
+		return "user-black";
+	} else if (r < 1200) {
 		return "user-gray";
 	} else if (r < 1400) {
 		return "user-green";

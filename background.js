@@ -53,7 +53,11 @@ function loadTeams() {
 		$.getJSON("http://codeforces.com/api/user.info?handles=" + allHandles, function(data) {
 			var teamId = 0, userId = 0;
 			for (var user of data.result) {
-				teams[teamId].users[userId].rating = user.rating;
+				if (typeof user.rating === "undefined") {
+					teams[teamId].users[userId].rating = 0;
+				} else {
+					teams[teamId].users[userId].rating = user.rating;
+				}
 				teams[teamId].users[userId].handle = user.handle;
 				++userId;
 				if (userId == teams[teamId].users.length) {
@@ -61,12 +65,10 @@ function loadTeams() {
 					userId = 0;
 				}
 			}
-			
 			// recieving team_ids
 			teamIds = {};
 			for (var teamId = 0; teamId < teams.length; ++teamId) {
 				var team = teams[teamId];
-				console.log(team.str());
 				for (var i = 0; i < team.users.length; ++i) {
 					for (var j = i + 1; j < team.users.length; ++j) {
 						teamIds[team.subsetOfUsers([i, j])] = teamId;

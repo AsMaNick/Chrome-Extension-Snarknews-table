@@ -1,3 +1,8 @@
+.user-black {
+	color: black !important;
+	font-weight: normal !important;
+}
+
 .user-gray {
 	color: gray !important;
 }
