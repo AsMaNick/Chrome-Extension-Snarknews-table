@@ -1,15 +1,3 @@
-/*  Created in August 2017
-	Updated in February 2018
-	
-	by
-	Matvej Aslandukov    (@BigBag at codeforces.com),
-	
-	This extension comes with absolutely NO WARRANTY,
-	use it on your own risk.
-	
-	No rights reserved.
-*/
-
 var teams = [];
 var teamIds = {};
 var loaded = false;

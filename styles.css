@@ -1,58 +1,58 @@
 .user-gray {
-    color: gray !important;
+	color: gray !important;
 }
 
 .user-red {
-    color: red !important;
+	color: red !important;
 }
 
 .user-orange {
-    color: #FF8C00 !important;
+	color: #FF8C00 !important;
 }
 
 .user-violet {
-    color: #a0a !important;
+	color: #a0a !important;
 }
 
 .user-blue {
-    color: blue !important;
+	color: blue !important;
 }
 
 .user-cyan {
-    color: #03A89E !important;
+	color: #03A89E !important;
 }
 
 .user-green {
-    color: green !important;
+	color: green !important;
 }
 
 .legendary-user-first-letter {
-    color: black !important;
+	color: black !important;
 }
 
 .user-legendary {
-    color: red !important;
+	color: red !important;
 }
 
 TR.standExt0 {
-    BACKGROUND-COLOR: #F8F8F8;
+	BACKGROUND-COLOR: #F8F8F8;
 }
 
 TR.standExt1 {
-    BACKGROUND-COLOR: #F2F2F2;
+	BACKGROUND-COLOR: #F2F2F2;
 }
 
 TR.standExt2 {
-    BACKGROUND-COLOR: #E0E0FF;
+	BACKGROUND-COLOR: #E0E0FF;
 }
 
 TR.standExt3 {
-    BACKGROUND-COLOR: #E8E8FF;
+	BACKGROUND-COLOR: #E8E8FF;
 }
 
 TD.stndExt {
-    font-size: 12px;
-    border-width: 0px;
-    border-color: #000000;
-    margin: 1px;
+	font-size: 12px;
+	border-width: 0px;
+	border-color: #000000;
+	margin: 1px;
 }

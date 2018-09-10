@@ -6,14 +6,14 @@ function getColor(r) {
 	} else if (r < 1600) {
 		return "user-cyan";
 	} else if (r < 1900) {
-        return "user-blue";
-    } else if (r < 2100) {
-        return "user-violet";
-    } else if (r < 2400) {
-        return "user-orange";
-    } else if (r < 3000) {
-        return "user-red";
-    } else {
+		return "user-blue";
+	} else if (r < 2100) {
+		return "user-violet";
+	} else if (r < 2400) {
+		return "user-orange";
+	} else if (r < 3000) {
+		return "user-red";
+	} else {
 		return "user-legendary";
 	}
 }
