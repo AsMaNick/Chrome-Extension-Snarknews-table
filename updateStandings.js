@@ -213,7 +213,7 @@ function modifyStandings(index, elem) {
 				if (isLetter(text[position]) || (text[position] == " " && lastName != "")) {
 					lastName += text[position];
 				} else {
-					var spaceIndex = lastName.indexOf(" "), addSpace = "", fullLastName = lastName;
+					var spaceIndex = lastName.lastIndexOf(" "), addSpace = "", fullLastName = lastName;
 					if (spaceIndex != -1) {
 						if (spaceIndex + 1 == lastName.length) {
 							lastName = lastName.slice(0, -1);
