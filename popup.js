@@ -24,6 +24,9 @@ function getTime(date) {
 function updateLastLoaded() {
 	chrome.extension.sendRequest(['lastLoaded'], function(data) {
 		lastLoaded = data['lastLoaded'];
+		if (lastLoaded != 0) {
+			document.getElementById("imgReload").src = "static/reload.png";
+		}
 		var elem = document.getElementById('lastLoaded');
 		elem.innerHTML = 'Last update of all users: ' + getTime(lastLoaded) + '.';
 	});
@@ -166,6 +169,7 @@ function setFilledData() {
 }
 
 function reloadTeams() {
+	document.getElementById("imgReload").src = "static/5_s.gif";
 	chrome.extension.sendRequest(["reloadTeams"], function(data) {
 	});
 }
