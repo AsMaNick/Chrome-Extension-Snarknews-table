@@ -213,14 +213,14 @@ function modifyStandings(index, elem) {
 				if (isLetter(text[position]) || (text[position] == " " && lastName != "")) {
 					lastName += text[position];
 				} else {
-					var spaceIndex = lastName.lastIndexOf(" "), addSpace = "", fullLastName = lastName;
+					var addSpace = "", fullLastName = lastName;
+					while (lastName[lastName.length - 1] == " ") {
+						addSpace = " ";
+						lastName = lastName.slice(0, -1);
+					}
+					var spaceIndex = lastName.lastIndexOf(" ");
 					if (spaceIndex != -1) {
-						if (spaceIndex + 1 == lastName.length) {
-							lastName = lastName.slice(0, -1);
-							addSpace = " ";
-						} else {
-							lastName = lastName.substring(spaceIndex + 1);
-						}
+						lastName = lastName.substring(spaceIndex + 1);
 					}
 					if (allNames.has(lastName)) {
 						for (var userId = 0; userId < team.users.length; ++userId) {
