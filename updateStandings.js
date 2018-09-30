@@ -187,12 +187,23 @@ function modifyStandings(index, elem) {
 		var startPosition = position;
 		var newTeam = "", rating = 0;
 		while (position < text.length) {
-			if (isLetter(text[position])) {
+			if (isLetter(text[position]) || (text[position] == " " && lastName != "")) {
 				lastName += text[position];
 			} else {
 				lastName = lastName;
+				while (lastName[lastName.length - 1] == " ") {
+					lastName = lastName.slice(0, -1);
+				}
 				if (allNames.has(lastName)) {
 					allUsers.push(lastName);
+				} else {
+					var spaceIndex = lastName.lastIndexOf(" ");
+					if (spaceIndex != -1) {
+						lastName = lastName.substring(spaceIndex + 1);
+					}
+					if (allNames.has(lastName)) {
+						allUsers.push(lastName);
+					}
 				}
 				lastName = "";
 				if (text[position] == "<") {
@@ -219,7 +230,7 @@ function modifyStandings(index, elem) {
 						lastName = lastName.slice(0, -1);
 					}
 					var spaceIndex = lastName.lastIndexOf(" ");
-					if (spaceIndex != -1) {
+					if (!allNames.has(lastName) && spaceIndex != -1) {
 						lastName = lastName.substring(spaceIndex + 1);
 					}
 					if (allNames.has(lastName)) {

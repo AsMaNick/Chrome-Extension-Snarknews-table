@@ -1,7 +1,7 @@
 {
 	"name": "Contest Standings",
 	"short_name": "Contest Standings",
-	"version": "3.2.3",
+	"version": "3.2.5",
 	"description": "Shows standings with updated names from codeforces",
 
 	"manifest_version": 2,
