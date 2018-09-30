@@ -49,7 +49,7 @@ function updateName(user) {
 	}
 	var result = "<a href=http://www.codeforces.com/profile/" + user.handle + " title=\"" + name + "\" class=\"" + getColor(user.rating) + "\">";
 	if (handle.length > 17) {
-		hanlde = hanlde.substr(0, 16) + "..." + hanlde.substr(hanlde.length - 1);
+		handle = handle.substr(0, 16) + "..." + handle.substr(handle.length - 1);
 	}
 	if (getColor(user.rating) == "user-legendary") {
 		result += "<span class=\"legendary-user-first-letter\">" + handle[0] + "</span>";
