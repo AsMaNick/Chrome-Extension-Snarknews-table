@@ -155,7 +155,6 @@ function isYandex() {
 }
 
 function modifyStandings(index, elem) {
-	console.log(allNames);
 	var text = elem.innerHTML, newText = "";
 	if (!isYandex()) {
 		text = elem.outerHTML;
@@ -167,6 +166,7 @@ function modifyStandings(index, elem) {
 	if (isYandex()) {
 		lookFor = ["<tr", "<span class=\"user__first-letter\">", "</span>"];
 	}
+	text = text.split('<font color="#ff0000">').join('<font color="#000000" style="font-weight: bold">')
 	while (true) {
 		for (var s of lookFor) {
 			position = text.indexOf(s, position + 1);
@@ -176,6 +176,9 @@ function modifyStandings(index, elem) {
 		}
 		if (position == -1) {
 			break;
+		}
+		if (!isYandex() && text.substr(position + 1, 5) == '<font') { // for PTZ red color
+			position = text.indexOf('>', position + 1);
 		}
 		++position;
 		while (last < position) {
