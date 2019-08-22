@@ -1,7 +1,7 @@
 {
 	"name": "Contest Standings",
 	"short_name": "Contest Standings",
-	"version": "3.2.5",
+	"version": "3.2.7",
 	"description": "Shows standings with updated names from codeforces",
 
 	"manifest_version": 2,
@@ -26,7 +26,14 @@
 	[{
 		"js": ["include.js", "third_party/jquery.js", "updateStandings.js"],
 		"css": ["styles.css"],
-		"matches": ["http://*.snarknews.info/*", "http://opencup.ru/*", "https://official.contest.yandex.ru/*", "https://official.contest.yandex.com/*"]
+		"matches": [
+            "http://*.snarknews.info/*", 
+            "http://opencup.ru/*", 
+            "https://official.contest.yandex.ru/*", 
+            "https://official.contest.yandex.com/*", 
+            "https://contest.yandex.ru/*",
+            "https://contest.yandex.com/*",
+            "http://opentrains.mipt.ru/*"]
 	}],
 
 	"background":
