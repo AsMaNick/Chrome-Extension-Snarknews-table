@@ -8,6 +8,64 @@ var blockedSites = new Set();
 var currentSite = "";
 var filledData = {};
 
+function makeAllRequests(startTeam) {
+    var maxTeams = 150;
+    var allHandles = "";
+    for (var teamId = startTeam; teamId < teams.length && teamId < startTeam + maxTeams; ++teamId) {
+        for (var user of teams[teamId].users) {
+            allHandles += user.handle + ";";
+        }
+    }
+    console.log(allHandles);
+    // recieving user ratings
+    $.getJSON("http://codeforces.com/api/user.info?handles=" + allHandles, function(data) {
+        var teamId = startTeam, userId = 0;
+        for (var user of data.result) {
+            if (typeof user.rating === "undefined") {
+                teams[teamId].users[userId].rating = 0;
+            } else {
+                teams[teamId].users[userId].rating = user.rating;
+            }
+            teams[teamId].users[userId].handle = user.handle;
+            ++userId;
+            if (userId == teams[teamId].users.length) {
+                ++teamId;
+                userId = 0;
+            }
+        }
+        // recieving team_ids
+        for (var teamId = startTeam; teamId < teams.length && teamId < startTeam + maxTeams; ++teamId) {
+            var team = teams[teamId];
+            for (var i = 0; i < team.users.length; ++i) {
+                for (var j = i + 1; j < team.users.length; ++j) {
+                    teamIds[team.subsetOfUsers([i, j])] = teamId;
+                    for (var k = j + 1; k < team.users.length; ++k) {
+                        teamIds[team.subsetOfUsers([i, j, k])] = teamId;
+                        for (var q = k + 1; q < team.users.length; ++q) {
+                            teamIds[team.subsetOfUsers([i, j, k, q])] = teamId;
+                            for (var w = q + 1; w < team.users.length; ++w) {
+                                teamIds[team.subsetOfUsers([i, j, k, q, w])] = teamId;
+                            }
+                        }
+                    }
+                }
+            }
+            if (team.users.length == 1) {
+                teamIds[team.subsetOfUsers([0])] = teamId;
+            }
+        }
+        if (startTeam + maxTeams < teams.length) {
+            makeAllRequests(startTeam + maxTeams);
+        } else {
+            loaded = true;
+            loading = false;
+            lastLoaded = Date.now();
+        }
+    }).fail(function(jqxhr, textStatus, error) {
+        loading = false;
+    });
+}
+
 function loadTeams() {
 	if (loading) {
 		return;
@@ -43,56 +101,8 @@ function loadTeams() {
 			team.sortUsers();
 			teams.push(team);
 		}
-		// recieving user ratings
-		var allHandles = "";
-		for (var team of teams) {
-			for (var user of team.users) {
-				allHandles += user.handle + ";";
-			}
-		}
-		$.getJSON("http://codeforces.com/api/user.info?handles=" + allHandles, function(data) {
-			var teamId = 0, userId = 0;
-			for (var user of data.result) {
-				if (typeof user.rating === "undefined") {
-					teams[teamId].users[userId].rating = 0;
-				} else {
-					teams[teamId].users[userId].rating = user.rating;
-				}
-				teams[teamId].users[userId].handle = user.handle;
-				++userId;
-				if (userId == teams[teamId].users.length) {
-					++teamId;
-					userId = 0;
-				}
-			}
-			// recieving team_ids
-			teamIds = {};
-			for (var teamId = 0; teamId < teams.length; ++teamId) {
-				var team = teams[teamId];
-				for (var i = 0; i < team.users.length; ++i) {
-					for (var j = i + 1; j < team.users.length; ++j) {
-						teamIds[team.subsetOfUsers([i, j])] = teamId;
-						for (var k = j + 1; k < team.users.length; ++k) {
-							teamIds[team.subsetOfUsers([i, j, k])] = teamId;
-							for (var q = k + 1; q < team.users.length; ++q) {
-								teamIds[team.subsetOfUsers([i, j, k, q])] = teamId;
-								for (var w = q + 1; w < team.users.length; ++w) {
-									teamIds[team.subsetOfUsers([i, j, k, q, w])] = teamId;
-								}
-							}
-						}
-					}
-				}
-				if (team.users.length == 1) {
-					teamIds[team.subsetOfUsers([0])] = teamId;
-				}
-			}
-			loaded = true;
-			loading = false;
-			lastLoaded = Date.now();
-		}).fail(function(jqxhr, textStatus, error) {
-			loading = false;
-		});
+        teamIds = {};
+		makeAllRequests(0);
 	}).fail(function(jqxhr, textStatus, error) {
 		loading = false;
 	});
