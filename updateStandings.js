@@ -234,7 +234,11 @@ function modifyStandings(index, elem) {
 					}
 					var spaceIndex = lastName.lastIndexOf(" ");
 					if (!allNames.has(lastName) && spaceIndex != -1) {
-						lastName = lastName.substring(spaceIndex + 1);
+                        if (allNames.has(lastName.substring(spaceIndex + 1))) {
+                            lastName = lastName.substring(spaceIndex + 1);
+                        } else if (allNames.has(lastName.substring(0, spaceIndex))) {
+                            lastName = lastName.substring(0, spaceIndex);
+                        }
 					}
 					if (allNames.has(lastName)) {
 						for (var userId = 0; userId < team.users.length; ++userId) {

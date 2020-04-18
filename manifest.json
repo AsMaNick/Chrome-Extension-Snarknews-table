@@ -1,7 +1,7 @@
 {
 	"name": "Contest Standings",
 	"short_name": "Contest Standings",
-	"version": "3.3.1",
+	"version": "3.3.2",
 	"description": "Shows standings with updated names from codeforces",
 
 	"manifest_version": 2,
@@ -33,8 +33,7 @@
             "https://official.contest.yandex.com/*", 
             "https://contest.yandex.ru/*",
             "https://contest.yandex.com/*",
-            "http://opentrains.mipt.ru/*",
-            "file:///D:/User/Downloads/*"]
+            "http://*.mipt.ru/*"]
 	}],
 
 	"background":
