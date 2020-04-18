@@ -154,6 +154,21 @@ function isYandex() {
 	return href.indexOf("yandex") != -1;
 }
 
+function updateLastName(lastName) {
+    if (allNames.has(lastName)) {
+        return lastName;
+    }
+    var spaceIndex = lastName.lastIndexOf(" ");
+    if (spaceIndex != -1) {
+        if (allNames.has(lastName.substring(spaceIndex + 1))) {
+            lastName = lastName.substring(spaceIndex + 1);
+        } else if (allNames.has(lastName.substring(0, spaceIndex))) {
+            lastName = lastName.substring(0, spaceIndex);
+        }
+    }
+    return lastName;
+}
+
 function modifyStandings(index, elem) {
 	var text = elem.innerHTML, newText = "";
 	if (!isYandex()) {
@@ -190,23 +205,16 @@ function modifyStandings(index, elem) {
 		var startPosition = position;
 		var newTeam = "", rating = 0;
 		while (position < text.length) {
-			if (isLetter(text[position]) || (text[position] == " " && lastName != "")) {
+			if (isLetter(text[position]) || (text[position] == " " && lastName != "") || (text[position] == "-" && lastName != "" && isLetter(text[position + 1]))) {
 				lastName += text[position];
 			} else {
 				lastName = lastName;
 				while (lastName[lastName.length - 1] == " ") {
 					lastName = lastName.slice(0, -1);
 				}
+                lastName = updateLastName(lastName);
 				if (allNames.has(lastName)) {
 					allUsers.push(lastName);
-				} else {
-					var spaceIndex = lastName.lastIndexOf(" ");
-					if (spaceIndex != -1) {
-						lastName = lastName.substring(spaceIndex + 1);
-					}
-					if (allNames.has(lastName)) {
-						allUsers.push(lastName);
-					}
 				}
 				lastName = "";
 				if (text[position] == "<") {
@@ -224,7 +232,7 @@ function modifyStandings(index, elem) {
 			var teamRatings = [];
 			position = startPosition;
 			while (position < text.length) {
-				if (isLetter(text[position]) || (text[position] == " " && lastName != "")) {
+				if (isLetter(text[position]) || (text[position] == " " && lastName != "") || (text[position] == "-" && lastName != "" && isLetter(text[position + 1]))) {
 					lastName += text[position];
 				} else {
 					var addSpace = "", fullLastName = lastName;
@@ -233,13 +241,7 @@ function modifyStandings(index, elem) {
 						lastName = lastName.slice(0, -1);
 					}
 					var spaceIndex = lastName.lastIndexOf(" ");
-					if (!allNames.has(lastName) && spaceIndex != -1) {
-                        if (allNames.has(lastName.substring(spaceIndex + 1))) {
-                            lastName = lastName.substring(spaceIndex + 1);
-                        } else if (allNames.has(lastName.substring(0, spaceIndex))) {
-                            lastName = lastName.substring(0, spaceIndex);
-                        }
-					}
+					lastName = updateLastName(lastName);
 					if (allNames.has(lastName)) {
 						for (var userId = 0; userId < team.users.length; ++userId) {
 							var user = team.users[userId];
