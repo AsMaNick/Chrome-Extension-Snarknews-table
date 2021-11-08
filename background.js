@@ -70,27 +70,21 @@ function loadTeams() {
 	if (loading) {
 		return;
 	}
-	$.getJSON("https://spreadsheets.google.com/feeds/list/1KPV1mk9sCnpimqQVcbaZdCQlwq9pxL86uUERQCTsAp8/od6/public/values?alt=json", function(data) {
+	$.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1KPV1mk9sCnpimqQVcbaZdCQlwq9pxL86uUERQCTsAp8/values/AllTeams?alt=json&key=AIzaSyDbLmGMZKFkc-R9mWCRBrn50ZCyhFpYsLA", function(data) {
 		loaded = false;
 		loading = true;
 		// recieving teams
-		allTeams = data.feed.entry;
+		allTeams = data.values;
 		teams = [];
-		for (var i = 0; i < allTeams.length; ++i) {
+		for (var i = 1; i < allTeams.length; ++i) {
 			var teamJson = allTeams[i];
-			var teamName = teamJson.gsx$teamname.$t;
+			var teamName = teamJson[1];
 			var names = [];
 			var handles = [];
-			names.push(teamJson.gsx$name1.$t);
-			names.push(teamJson.gsx$name2.$t);
-			names.push(teamJson.gsx$name3.$t);
-			names.push(teamJson.gsx$name4.$t);
-			names.push(teamJson.gsx$name5.$t);
-			handles.push(teamJson.gsx$handle1.$t);
-			handles.push(teamJson.gsx$handle2.$t);
-			handles.push(teamJson.gsx$handle3.$t);
-			handles.push(teamJson.gsx$handle4.$t);
-			handles.push(teamJson.gsx$handle5.$t);
+            for (var j = 2; j + 1 < teamJson.length; j += 2) {
+                names.push(teamJson[j]);
+                handles.push(teamJson[j + 1]);
+            }
 			
 			var team = new Team(teamName);
 			for (var j = 0; j < names.length; ++j) {
