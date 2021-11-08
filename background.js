@@ -67,98 +67,98 @@ function makeAllRequests(startTeam) {
 }
 
 function loadTeams() {
-	if (loading) {
-		return;
-	}
-	$.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1KPV1mk9sCnpimqQVcbaZdCQlwq9pxL86uUERQCTsAp8/values/AllTeams?alt=json&key=AIzaSyDbLmGMZKFkc-R9mWCRBrn50ZCyhFpYsLA", function(data) {
-		loaded = false;
-		loading = true;
-		// recieving teams
-		allTeams = data.values;
-		teams = [];
-		for (var i = 1; i < allTeams.length; ++i) {
-			var teamJson = allTeams[i];
-			var teamName = teamJson[1];
-			var names = [];
-			var handles = [];
+    if (loading) {
+        return;
+    }
+    $.getJSON("https://sheets.googleapis.com/v4/spreadsheets/1KPV1mk9sCnpimqQVcbaZdCQlwq9pxL86uUERQCTsAp8/values/AllTeams?alt=json&key=AIzaSyDbLmGMZKFkc-R9mWCRBrn50ZCyhFpYsLA", function(data) {
+        loaded = false;
+        loading = true;
+        // recieving teams
+        allTeams = data.values;
+        teams = [];
+        for (var i = 1; i < allTeams.length; ++i) {
+            var teamJson = allTeams[i];
+            var teamName = teamJson[1];
+            var names = [];
+            var handles = [];
             for (var j = 2; j + 1 < teamJson.length; j += 2) {
                 names.push(teamJson[j]);
                 handles.push(teamJson[j + 1]);
             }
-			
-			var team = new Team(teamName);
-			for (var j = 0; j < names.length; ++j) {
-				if (names[j] != "") {
-					team.addUser(new User(names[j], handles[j]));
-				}
-			}
-			team.sortUsers();
-			teams.push(team);
-		}
+            
+            var team = new Team(teamName);
+            for (var j = 0; j < names.length; ++j) {
+                if (names[j] != "") {
+                    team.addUser(new User(names[j], handles[j]));
+                }
+            }
+            team.sortUsers();
+            teams.push(team);
+        }
         teamIds = {};
-		makeAllRequests(0);
-	}).fail(function(jqxhr, textStatus, error) {
-		loading = false;
-	});
+        makeAllRequests(0);
+    }).fail(function(jqxhr, textStatus, error) {
+        loading = false;
+    });
 }
 
 function getSite(request) {
-	if (request == 'current') {
-		return currentSite;
-	}
-	return request;
+    if (request == 'current') {
+        return currentSite;
+    }
+    return request;
 }
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-	if (request[0] == 'data') {
-		var data = {};
-		if (loaded) {
-			data['teams'] = teams;
-			data['teamIds'] = teamIds;
-			data['showingType'] = showingType;
-		} else {
-			data['teams'] = [];
-			data['teamIds'] = {};
-			data['showingType'] = 0;
-		}
-		sendResponse(data);
-	} else if (request[0] == 'lastLoaded') {
-		var data = {'lastLoaded': lastLoaded};
-		sendResponse(data);
-	} else if (request[0] == 'updateShowingType') {
-		showingType ^= 1;
-	} else if (request[0] == 'getShowingType') {
-		var data = {'showingType': showingType};
-		sendResponse(data);
-	} else if (request[0] == 'setCurrentSite') {
-		currentSite = request[1];
-	} else if (request[0] == 'blockSite') {
-		blockedSites.add(getSite(request[1]));
-	} else if (request[0] == 'unblockSite') {
-		blockedSites.delete(getSite(request[1]));
-	} else if (request[0] == 'checkSite') {
-		var data = {'blocked': false};
-		for (var site of request[1]) {
-			if (blockedSites.has(getSite(site))) {
-				data['blocked'] = true;
-				break;
-			}
-		}
-		sendResponse(data);
-	} else if (request[0] == 'setFilledData') {
-		filledData = request[1];
-	} else if (request[0] == 'getFilledData') {
-		sendResponse(filledData);
-	} else if (request[0] == 'reloadTeams') {
-		loadTeams();
-	}
+    if (request[0] == 'data') {
+        var data = {};
+        if (loaded) {
+            data['teams'] = teams;
+            data['teamIds'] = teamIds;
+            data['showingType'] = showingType;
+        } else {
+            data['teams'] = [];
+            data['teamIds'] = {};
+            data['showingType'] = 0;
+        }
+        sendResponse(data);
+    } else if (request[0] == 'lastLoaded') {
+        var data = {'lastLoaded': lastLoaded};
+        sendResponse(data);
+    } else if (request[0] == 'updateShowingType') {
+        showingType ^= 1;
+    } else if (request[0] == 'getShowingType') {
+        var data = {'showingType': showingType};
+        sendResponse(data);
+    } else if (request[0] == 'setCurrentSite') {
+        currentSite = request[1];
+    } else if (request[0] == 'blockSite') {
+        blockedSites.add(getSite(request[1]));
+    } else if (request[0] == 'unblockSite') {
+        blockedSites.delete(getSite(request[1]));
+    } else if (request[0] == 'checkSite') {
+        var data = {'blocked': false};
+        for (var site of request[1]) {
+            if (blockedSites.has(getSite(site))) {
+                data['blocked'] = true;
+                break;
+            }
+        }
+        sendResponse(data);
+    } else if (request[0] == 'setFilledData') {
+        filledData = request[1];
+    } else if (request[0] == 'getFilledData') {
+        sendResponse(filledData);
+    } else if (request[0] == 'reloadTeams') {
+        loadTeams();
+    }
 });
 
 function checkNeedLoad() {
-	var milliSecondsSinceLastLoad = (Date.now() - lastLoaded);
-	if (milliSecondsSinceLastLoad > 6 * 60 * 60 * 1000) { // reload teams every 6 hours.
-		loadTeams();
-	}
+    var milliSecondsSinceLastLoad = (Date.now() - lastLoaded);
+    if (milliSecondsSinceLastLoad > 6 * 60 * 60 * 1000) { // reload teams every 6 hours.
+        loadTeams();
+    }
 }
 
 loadTeams();
